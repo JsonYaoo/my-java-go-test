@@ -1,5 +1,6 @@
 package com.jsonyao.cs.generic;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import java.util.List;
  * 泛型测试类
  * A. Relation:
  *      a. https://www.cnblogs.com/coprince/p/8603492.html
+ *      b. https://blog.csdn.net/mhmyqn/article/details/47342577?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param
  */
 public class Client {
 
@@ -194,13 +196,31 @@ public class Client {
          *          a. 不可以创建一个确切泛型类型的数组
          *          b. 但可以创建一个通配符泛型类型的数组, 且获取时必须进行类型转换
          */
-//        List<String> [] testList =  new ArrayList<String>[10];// 编译错误, 不能创建一个确切泛型类型的数组
-        List<?>[] testList = new ArrayList<?>[10];// 编译通过, 但可以创建一个通配符泛型类型的数组
-        List<String> ls = new ArrayList<>();
-        ls.add("aaa");
-        testList[0] = ls;
-        String str = (String) testList[0].get(0);
-        System.out.println(str);
+////        List<String> [] testList =  new ArrayList<String>[10];// 编译错误, 不能创建一个确切泛型类型的数组
+//        List<?>[] testList = new ArrayList<?>[10];// 编译通过, 但可以创建一个通配符泛型类型的数组
+//        List<String> ls = new ArrayList<>();
+//        ls.add("aaa");
+//        testList[0] = ls;
+//        String str = (String) testList[0].get(0);
+//        System.out.println(str);
+
+        /**
+         * 10、测试桥接方法
+         *      A. 在子类继承泛型父类或者实现泛型接口, 并明确指定了泛型类型时, 编译器会自动生成桥接方法(其中一种生成的情况)
+         *      B. 因为如果不生成桥接方法, 在泛型擦除后, 子类参数将成为Object, 此时就不再实现父类或者接口的方法,
+         *         因此, 为了维持多态性, 需要生成桥接方法, 利用Object类型转换连接实现的方法
+         *      C. 如果手动重写桥接方法, 会报编译异常
+         */
+        SuperClass superClass = new SubClass();
+        superClass.test("23");// 调用SubClass实现接口方法
+//        superClass.test(new Object());// 调用SubClass桥接方法 -> 运行异常, 桥接方法里会对Object进行类型转换
+
+        Class clazz = SubClass.class;
+        Method[] methods = clazz.getDeclaredMethods();
+        for(Method method : methods){
+            System.out.println(method.isBridge());// 自动生成桥接方法
+            System.out.println(method.toString());
+        }
     }
 
     /**
