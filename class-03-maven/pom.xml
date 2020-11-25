@@ -10,6 +10,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>class-03-maven</artifactId>
+    <packaging>war</packaging>
+
+    <!-- Relation:
+            a. https://www.cnblogs.com/codestory/p/11271016.html
+     -->
 
     <!-- 0、定义所有profile -->
     <profiles>
@@ -43,12 +48,38 @@
 
     <build>
         <!-- 1、替换占位符方法: 定义resources插件, 定制资源复制的动作 -->
+        <!--<resources>-->
+            <!--<resource>-->
+                <!--<directory>src/main/resouces</directory>-->
+                <!--<excludes>-->
+                    <!--<exclude></exclude>-->
+                <!--</excludes>-->
+                <!--&lt;!&ndash; 允许替换占位符 &ndash;&gt;-->
+                <!--<filtering>true</filtering>-->
+            <!--</resource>-->
+        <!--</resources>-->
+
+        <!-- 2、复制文件方法 -->
         <resources>
+            <!-- 测试overwrite为false是否会发生替换符赋值 -->
             <resource>
                 <directory>src/main/resouces</directory>
-
+                <excludes>
+                    <exclude>profile/**</exclude>
+                </excludes>
                 <!-- 允许替换占位符 -->
                 <filtering>true</filtering>
+            </resource>
+
+            <resource>
+                <!-- 复制源文件夹, ${active.profile}代表输入的profile值-->
+                <directory>src/main/resouces/profile/${active.profile}}</directory>
+
+                <!-- 复制的目标文件夹 -->
+               <targetPath>config</targetPath>
+
+                <!-- 不替换占位符, 直接复制 -->
+                <filtering>false</filtering>
             </resource>
         </resources>
 
@@ -62,6 +93,16 @@
                     <encoding>UTF-8</encoding>
                     <!-- 目标文件存在时覆盖 -->
                     <overwrite>true</overwrite>
+                </configuration>
+            </plugin>
+
+            <!-- war打包 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <warName>${project.artifactId}</warName>
                 </configuration>
             </plugin>
         </plugins>
