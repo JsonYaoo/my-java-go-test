@@ -131,7 +131,7 @@
         <!-- 1、替换占位符方法: 定义resources插件, 定制资源复制的动作 => 可以完成多profile参数的赋值 -->
         <resources>
             <resource>
-                <directory>src/main/resouces</directory>
+                <directory>${basedir}/src/main/resouces</directory>
                 <excludes>
                     <exclude></exclude>
                 </excludes>
