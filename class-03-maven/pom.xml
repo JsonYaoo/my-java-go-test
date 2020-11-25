@@ -16,6 +16,45 @@
             a. https://www.cnblogs.com/codestory/p/11271016.html
      -->
 
+    <!--&lt;!&ndash; 5、测试setting.xml与pom.xml的profile优先级 => 放到setting.xml中, 可以看到如果定义了相同id的profile, setting.xml最后加载, 且activeProfiles属性会记录每个文件的profile id以及来源 &ndash;&gt;-->
+    <!--&lt;!&ndash; 开发环境 &ndash;&gt;-->
+    <!--<profile>-->
+        <!--<id>dev</id>-->
+        <!--<properties>-->
+            <!--<active.profile>dev</active.profile>-->
+            <!--<database.host>settings.localhost</database.host>-->
+            <!--<path.root>/settings/dev/app/attachments</path.root>-->
+        <!--</properties>-->
+    <!--</profile>-->
+
+    <!--&lt;!&ndash; 测试环境 &ndash;&gt;-->
+    <!--<profile>-->
+        <!--<id>test</id>-->
+        <!--<properties>-->
+            <!--<active.profile>test</active.profile>-->
+            <!--<database.host>settings.test.codestory.tech</database.host>-->
+            <!--<path.root>/settings/test/app/attachments</path.root>-->
+        <!--</properties>-->
+    <!--</profile>-->
+
+    <!--&lt;!&ndash; 生产环境 &ndash;&gt;-->
+    <!--<profile>-->
+        <!--<id>prod</id>-->
+        <!--<properties>-->
+            <!--<active.profile>prod</active.profile>-->
+            <!--<database.host>settings.prod.codestory.tech</database.host>-->
+            <!--<path.root>/settings/prod/app/attachments</path.root>-->
+        <!--</properties>-->
+    <!--</profile>-->
+
+    <!--<profile>-->
+        <!--<id>local</id>-->
+        <!--<properties>-->
+            <!--<active.profile>settings.local</active.profile>-->
+            <!--<path.root>D:/settings/develop/attachments</path.root>-->
+        <!--</properties>-->
+    <!--</profile>-->
+
     <!-- 0、定义所有profile -->
     <profiles>
         <!-- 开发环境 -->
@@ -24,7 +63,18 @@
             <properties>
                 <active.profile>dev</active.profile>
                 <database.host>localhost</database.host>
+                <path.root>/dev/app/attachments</path.root>
             </properties>
+            <!-- 4、在profile中定义build参数 => 修改profile复制文件方法, 等价于在resouces中配置目录路径 -->
+            <!--<build>-->
+                <!--<resources>-->
+                    <!--<resource>-->
+                        <!--<directory>src/main/resouces/profiles/dev</directory>-->
+                        <!--<targetPath>config</targetPath>-->
+                        <!--<filtering>false</filtering>-->
+                    <!--</resource>-->
+                <!--</resources>-->
+            <!--</build>-->
         </profile>
 
         <!-- 测试环境 -->
@@ -33,7 +83,18 @@
             <properties>
                 <active.profile>test</active.profile>
                 <database.host>test.codestory.tech</database.host>
+                <path.root>/test/app/attachments</path.root>
             </properties>
+            <!-- 4、在profile中定义build参数 => 修改profile复制文件方法, 等价于在resouces中配置目录路径 -->
+            <!--<build>-->
+                <!--<resources>-->
+                    <!--<resource>-->
+                        <!--<directory>src/main/resouces/profiles/test</directory>-->
+                        <!--<targetPath>config</targetPath>-->
+                        <!--<filtering>false</filtering>-->
+                    <!--</resource>-->
+                <!--</resources>-->
+            <!--</build>-->
         </profile>
 
         <!-- 生产环境 -->
@@ -42,46 +103,66 @@
             <properties>
                 <active.profile>prod</active.profile>
                 <database.host>prod.codestory.tech</database.host>
+                <path.root>/prod/app/attachments</path.root>
+            </properties>
+            <!-- 4、在profile中定义build参数 => 修改profile复制文件方法, 等价于在resouces中配置目录路径 -->
+            <!--<build>-->
+                <!--<resources>-->
+                    <!--<resource>-->
+                        <!--<directory>src/main/resouces/profiles/prod</directory>-->
+                        <!--<targetPath>config</targetPath>-->
+                        <!--<filtering>false</filtering>-->
+                    <!--</resource>-->
+                <!--</resources>-->
+            <!--</build>-->
+        </profile>
+
+        <!-- 3、替换占位符方法-多profile参数-本地环境 -> local环境必须放在最后才能满足前为test后为local的替换: 即后者替换前者的内容 -->
+        <profile>
+            <id>local</id>
+            <properties>
+                <active.profile>local</active.profile>
+                <path.root>D:/develop/attachments</path.root>
             </properties>
         </profile>
     </profiles>
 
     <build>
-        <!-- 1、替换占位符方法: 定义resources插件, 定制资源复制的动作 -->
-        <!--<resources>-->
-            <!--<resource>-->
-                <!--<directory>src/main/resouces</directory>-->
-                <!--<excludes>-->
-                    <!--<exclude></exclude>-->
-                <!--</excludes>-->
-                <!--&lt;!&ndash; 允许替换占位符 &ndash;&gt;-->
-                <!--<filtering>true</filtering>-->
-            <!--</resource>-->
-        <!--</resources>-->
-
-        <!-- 2、复制文件方法 -->
+        <!-- 1、替换占位符方法: 定义resources插件, 定制资源复制的动作 => 可以完成多profile参数的赋值 -->
         <resources>
-            <!-- 测试overwrite为false是否会发生替换符赋值 -->
             <resource>
                 <directory>src/main/resouces</directory>
                 <excludes>
-                    <exclude>profile/**</exclude>
+                    <exclude></exclude>
                 </excludes>
                 <!-- 允许替换占位符 -->
                 <filtering>true</filtering>
             </resource>
-
-            <resource>
-                <!-- 复制源文件夹, ${active.profile}代表输入的profile值-->
-                <directory>src/main/resouces/profile/${active.profile}}</directory>
-
-                <!-- 复制的目标文件夹 -->
-               <targetPath>config</targetPath>
-
-                <!-- 不替换占位符, 直接复制 -->
-                <filtering>false</filtering>
-            </resource>
         </resources>
+
+         <!--2、复制文件方法, 可以看到, 复制文件把多余的一行覆盖了 => 无法完成多profile参数的复制 -->
+        <!--<resources>-->
+            <!--&lt;!&ndash; 测试overwrite为false是否会发生替换符赋值 &ndash;&gt;-->
+            <!--<resource>-->
+                <!--<directory>src/main/resouces</directory>-->
+                <!--<excludes>-->
+                    <!--<exclude>profiles/**</exclude>-->
+                <!--</excludes>-->
+                <!--&lt;!&ndash; 允许替换占位符 &ndash;&gt;-->
+                <!--<filtering>true</filtering>-->
+            <!--</resource>-->
+
+            <!--<resource>-->
+                <!--&lt;!&ndash; 复制源文件夹, ${active.profiles}代表输入的profile值&ndash;&gt;-->
+                <!--<directory>src/main/resouces/profiles/${active.profile}</directory>-->
+
+                <!--&lt;!&ndash; 复制的目标文件夹 &ndash;&gt;-->
+               <!--<targetPath>config</targetPath>-->
+
+                <!--&lt;!&ndash; 不替换占位符, 直接复制 &ndash;&gt;-->
+                <!--<filtering>false</filtering>-->
+            <!--</resource>-->
+        <!--</resources>-->
 
         <plugins>
             <!-- 1、替换占位符方法: 定义resources插件, 定制资源复制的动作 -->
@@ -91,7 +172,7 @@
                 <version>3.0.2</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
-                    <!-- 目标文件存在时覆盖 -->
+                    <!-- 目标文件存在时覆盖, 复制方法时必须为true才进行文件的复制 -->
                     <overwrite>true</overwrite>
                 </configuration>
             </plugin>
