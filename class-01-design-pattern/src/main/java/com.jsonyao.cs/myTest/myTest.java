@@ -10,27 +10,38 @@ import java.util.Map;
  */
 public class myTest {
 
-    public static void main(String[] args) throws InterruptedException {
-//        Integer.valueOf(1);
-//
-//        int a = 9;
-//        int b = 1;
-//        while (true) {
-//            Thread.sleep(1000);
-//            Map<String,String> map = new HashMap<>();
-//            for (int i = a*(b-1)+1;i<=a*b;i++){
-//                String key = String.valueOf(i * (1<<16));
-//                map.put(String.valueOf(key),String.valueOf(key));
-//            }
-//            b++;
-//            List<Map.Entry<String, String>> entries = new ArrayList<>(map.entrySet());
-//            for (int i = 0; i < entries.size(); i++) {
-//                System.out.print(entries.get(i).getKey());
-//                System.out.print("\t");
-//            }
-//            System.out.println();
-//        }
+    public static void main(String[] args) throws Exception {
+//        test1();
+//        test2();
+        test3();
+    }
 
+    static class A<T> {
+        private T name;
+        private T age;
+
+        public A(T name, T age) {
+            this.name = name;
+            this.age = age;
+        }
+
+        @Override
+        public String toString() {
+            return "A{" +
+                    "name=" + name +
+                    ", age=" + age +
+                    '}';
+        }
+    }
+
+    public static void test3(){
+        A a1 = new A(1, "2");
+        System.out.println("a1:" + a1);
+
+//        A a2 = new A<Integer>(1, "22");// 编译报错
+    }
+
+    public static void test2(){
         // JDK 8
         Map<Integer, Integer> map = new HashMap<>();
 
@@ -61,6 +72,28 @@ public class myTest {
 
         for(Map.Entry<Integer, Integer> entry : map.entrySet()){
             System.out.print(entry.getKey() + "\t");
+        }
+    }
+
+    public static void test1() throws InterruptedException {
+        Integer.valueOf(1);
+
+        int a = 9;
+        int b = 1;
+        while (true) {
+            Thread.sleep(1000);
+            Map<String,String> map = new HashMap<>();
+            for (int i = a*(b-1)+1;i<=a*b;i++){
+                String key = String.valueOf(i * (1<<16));
+                map.put(String.valueOf(key),String.valueOf(key));
+            }
+            b++;
+            List<Map.Entry<String, String>> entries = new ArrayList<>(map.entrySet());
+            for (int i = 0; i < entries.size(); i++) {
+                System.out.print(entries.get(i).getKey());
+                System.out.print("\t");
+            }
+            System.out.println();
         }
     }
 
