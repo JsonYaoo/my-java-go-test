@@ -4,6 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.5.RELEASE</version>
+    </parent>
+
     <groupId>com.jsonyao.cs</groupId>
     <artifactId>my-java-go-test</artifactId>
     <packaging>pom</packaging>
@@ -13,6 +19,7 @@
         <module>class-01-design-pattern</module>
         <!--<module>class-02-java-se</module>-->
         <module>class-03-maven</module>
+        <module>class-04-spring-boot</module>
     </modules>
 
     <!--<properties>-->
@@ -20,6 +27,13 @@
         <!--<maven.compiler.source>1.7</maven.compiler.source>-->
         <!--<maven.compiler.target>1.7</maven.compiler.target>-->
     <!--</properties>-->
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -29,8 +43,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
