@@ -49,5 +49,12 @@
             </plugin>
         </plugins>
     </build>
-    
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>localRepository</id>
+            <url>file:D:\MyData\yaocs2\tools\apache-maven-3.3.9\repo</url>
+        </snapshotRepository>
+    </distributionManagement>
+
 </project>
