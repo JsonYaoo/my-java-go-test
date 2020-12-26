@@ -21,6 +21,7 @@
         <module>class-03-maven</module>
         <module>class-04-spring-boot</module>
         <module>class-04-servlet3</module>
+        <module>class-04-spi</module>
     </modules>
 
     <!--<properties>-->
