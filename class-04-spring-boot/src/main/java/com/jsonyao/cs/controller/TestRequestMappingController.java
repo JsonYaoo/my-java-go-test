@@ -1,4 +1,4 @@
-package com.jsonyao.cs.Controller;
+package com.jsonyao.cs.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
