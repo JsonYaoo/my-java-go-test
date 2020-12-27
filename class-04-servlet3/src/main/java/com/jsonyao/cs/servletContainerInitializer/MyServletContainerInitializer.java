@@ -63,7 +63,7 @@ public class MyServletContainerInitializer implements ServletContainerInitialize
 
         // 注册Servlet Filter
         FilterRegistration.Dynamic mySpiServletFilter = servletContext.addFilter("mySpiServletFilter", MySpiServletFilter.class);
-        mySpiServletFilter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+        mySpiServletFilter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/mySpiServlet/123");
     }
 
 }

@@ -5,15 +5,15 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 @WebListener
-public class MyServletListener implements ServletContextListener {
+public class MyJavaConfigServletListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        System.out.println("com.jsonyao.cs.listener.MyServletListener.contextInitialized");
+        System.out.println("com.jsonyao.cs.listener.MyJavaConfigServletListener.contextInitialized");
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        System.out.println("com.jsonyao.cs.listener.MyServletListener.contextDestroyed");
+        System.out.println("com.jsonyao.cs.listener.MyJavaConfigServletListener.contextDestroyed");
     }
 }

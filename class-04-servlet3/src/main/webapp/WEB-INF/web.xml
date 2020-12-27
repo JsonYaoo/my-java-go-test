@@ -3,4 +3,32 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+
+    <!--XML版本配置Servlet-->
+    <!--listener-->
+    <listener>
+        <listener-class>com.jsonyao.cs.listener.MyXmlServletListener</listener-class>
+    </listener>
+
+    <!--filter-->
+    <filter>
+        <filter-name>myXmlServletFilter</filter-name>
+        <filter-class>com.jsonyao.cs.filter.MyXmlServletFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>myXmlServletFilter</filter-name>
+        <url-pattern>/myXmlServlet/123</url-pattern>
+    </filter-mapping>
+
+    <!--servlet-->
+    <servlet>
+        <servlet-name>myXmlServlet</servlet-name>
+        <servlet-class>com.jsonyao.cs.servlet.MyXmlServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>myXmlServlet</servlet-name>
+        <url-pattern>/myXmlServlet/*</url-pattern>
+    </servlet-mapping>
+
 </web-app>
