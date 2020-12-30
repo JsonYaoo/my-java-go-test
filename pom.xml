@@ -23,6 +23,7 @@
         <module>class-04-servlet3</module>
         <module>class-04-spi</module>
         <module>class-04-spring-webmvc</module>
+        <module>class-20-concurrent</module>
     </modules>
 
     <!--<properties>-->
