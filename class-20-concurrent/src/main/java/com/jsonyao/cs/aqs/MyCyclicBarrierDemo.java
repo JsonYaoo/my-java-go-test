@@ -4,7 +4,7 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
 /**
- * 测试CyclicBarrier
+ * 测试CyclicBarrier: 子任务循环执行不同内容, 触发主任务不同的Action
  */
 public class MyCyclicBarrierDemo {
 

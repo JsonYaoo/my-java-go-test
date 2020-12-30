@@ -7,7 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 测试CountDownLatch
+ * 测试CountDownLatch: 只统计前NUMS个到达的线程, NUMS到达后触发主线程继续执行
  */
 public class MyCountDownLatchDemo {
 
