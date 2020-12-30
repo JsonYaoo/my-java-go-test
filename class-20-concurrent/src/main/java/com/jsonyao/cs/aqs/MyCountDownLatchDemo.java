@@ -57,8 +57,14 @@ class CountDownLatchRunningTask implements Runnable{
             Random random = new Random();
             int sleepTime = random.nextInt(1000);
             TimeUnit.MILLISECONDS.sleep(sleepTime);
+
+            // 子任务发生异常，也被算作子任务执行完毕(直接执行Finally, 不会抛出异常)。不会影响其他线程和CountDownLatch
+            if(i == 3){
+               throw new RuntimeException();
+            }
+
             System.out.println(Thread.currentThread().getName() + ": 子任务执行完毕! sleepTime=" + sleepTime);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException e) {// 不会抛出异常 -> Exception：则会抛出异常
             e.printStackTrace();
         } finally {
             // 线程执行完毕后调用 -> 签个到
