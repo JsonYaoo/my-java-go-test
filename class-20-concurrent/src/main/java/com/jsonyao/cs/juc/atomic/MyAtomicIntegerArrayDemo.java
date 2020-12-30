@@ -36,8 +36,44 @@ public class MyAtomicIntegerArrayDemo {
                 /**
                  * 2、ATOMIC_INTEGER_ARRAY.compareAndSet
                  */
-                int result = ATOMIC_INTEGER_ARRAY.addAndGet(index, index+1);
-                System.out.println("线程编号为：" + Thread.currentThread().getName() + " , index:" + index + ", 对应的原始值为：" + originValue + "，增加后的结果为：" + result);
+//                boolean result = ATOMIC_INTEGER_ARRAY.compareAndSet(index, originValue, index+2);
+//                System.out.println("线程编号为：" + Thread.currentThread().getName() + " , index:" + index + ", 对应的原始值为：" + originValue + "，设置后的结果为：" + result);
+
+                /**
+                 * 3、ATOMIC_INTEGER_ARRAY.decrementAndGet
+                 */
+//                int result = ATOMIC_INTEGER_ARRAY.decrementAndGet(index);
+//                System.out.println("线程编号为：" + Thread.currentThread().getName() + " , index:" + index + ", 对应的原始值为：" + originValue + "，减少后的结果为：" + result);
+
+                /**
+                 * 4、ATOMIC_INTEGER_ARRAY.incrementAndGet
+                 */
+//                int result = ATOMIC_INTEGER_ARRAY.incrementAndGet(index);
+//                System.out.println("线程编号为：" + Thread.currentThread().getName() + " , index:" + index + ", 对应的原始值为：" + originValue + "，增加后的结果为：" + result);
+
+                /**
+                 * 5、ATOMIC_INTEGER_ARRAY.getAndAdd
+                 */
+//                int result = ATOMIC_INTEGER_ARRAY.getAndAdd(index, index+1);
+//                System.out.println("线程编号为：" + Thread.currentThread().getName() + " , index:" + index + ", 对应的原始值为：" + originValue + "，增加前的结果为：" + result);
+
+                /**
+                 * 6、ATOMIC_INTEGER_ARRAY.getAndDecrement
+                 */
+//                int result = ATOMIC_INTEGER_ARRAY.getAndDecrement(index);
+//                System.out.println("线程编号为：" + Thread.currentThread().getName() + " , index:" + index + ", 对应的原始值为：" + originValue + "，减少前的结果为：" + result);
+
+                /**
+                 * 7、ATOMIC_INTEGER_ARRAY.getAndIncrement
+                 */
+//                int result = ATOMIC_INTEGER_ARRAY.getAndIncrement(index);
+//                System.out.println("线程编号为：" + Thread.currentThread().getName() + " , index:" + index + ", 对应的原始值为：" + originValue + "，增加前的结果为：" + result);
+
+                /**
+                 * 8、ATOMIC_INTEGER_ARRAY.getAndSet
+                 */
+                int result = ATOMIC_INTEGER_ARRAY.getAndSet(index, index);
+                System.out.println("线程编号为：" + Thread.currentThread().getName() + " , index:" + index + ", 对应的原始值为：" + originValue + "，设置前的结果为：" + result);
 
             });
             threads[i].start();
