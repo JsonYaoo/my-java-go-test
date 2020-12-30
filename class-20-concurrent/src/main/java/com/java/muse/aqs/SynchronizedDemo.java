@@ -10,39 +10,39 @@ import java.util.concurrent.TimeUnit;
 public class SynchronizedDemo {
     public static void main(String[] args) {
         /** case1：无Synchronized，乱序输出 */
-        //        NoneSyncDemo noneSyncDemo = new NoneSyncDemo();
-        //        Thread thread1 = new Thread(noneSyncDemo);
-        //        Thread thread2 = new Thread(noneSyncDemo);
+//        NoneSyncDemo noneSyncDemo = new NoneSyncDemo();
+//        Thread thread1 = new Thread(noneSyncDemo);
+//        Thread thread2 = new Thread(noneSyncDemo);
 
         /** case2：synchronized修饰代码块, 对象锁 */
         // 加锁有效
-        //        SyncBlockDemo syncBlockDemo = new SyncBlockDemo();
-        //        Thread thread1 = new Thread(syncBlockDemo);
-        //        Thread thread2 = new Thread(syncBlockDemo);
+//        SyncBlockDemo syncBlockDemo = new SyncBlockDemo();
+//        Thread thread1 = new Thread(syncBlockDemo);
+//        Thread thread2 = new Thread(syncBlockDemo);
 
         // 加锁无效
-        //        SyncBlockDemo syncBlockDemo1 = new SyncBlockDemo();
-        //        SyncBlockDemo syncBlockDemo2 = new SyncBlockDemo();
-        //        Thread thread1 = new Thread(syncBlockDemo1);
-        //        Thread thread2 = new Thread(syncBlockDemo2);
+//        SyncBlockDemo syncBlockDemo1 = new SyncBlockDemo();
+//        SyncBlockDemo syncBlockDemo2 = new SyncBlockDemo();
+//        Thread thread1 = new Thread(syncBlockDemo1);
+//        Thread thread2 = new Thread(syncBlockDemo2);
 
         /** case3：synchronized修饰普通方法，对象锁 */
         // 加锁有效
-        //        SyncMethodDemo syncMethodDemo = new SyncMethodDemo();
-        //        Thread thread1 = new Thread(syncMethodDemo);
-        //        Thread thread2 = new Thread(syncMethodDemo);
+//        SyncMethodDemo syncMethodDemo = new SyncMethodDemo();
+//        Thread thread1 = new Thread(syncMethodDemo);
+//        Thread thread2 = new Thread(syncMethodDemo);
 
         // 加锁无效
-        //                SyncMethodDemo syncMethodDemo1 = new SyncMethodDemo();
-        //                SyncMethodDemo syncMethodDemo2 = new SyncMethodDemo();
-        //                Thread thread1 = new Thread(syncMethodDemo1);
-        //                Thread thread2 = new Thread(syncMethodDemo2);
+//        SyncMethodDemo syncMethodDemo1 = new SyncMethodDemo();
+//        SyncMethodDemo syncMethodDemo2 = new SyncMethodDemo();
+//        Thread thread1 = new Thread(syncMethodDemo1);
+//        Thread thread2 = new Thread(syncMethodDemo2);
 
         /** case4：synchronized修饰静态方法，类锁 */
         // 加锁有效
-        //        SyncStaticMethodDemo syncStaticMethodDemo = new SyncStaticMethodDemo();
-        //        Thread thread1 = new Thread(syncStaticMethodDemo);
-        //        Thread thread2 = new Thread(syncStaticMethodDemo);
+//        SyncStaticMethodDemo syncStaticMethodDemo = new SyncStaticMethodDemo();
+//        Thread thread1 = new Thread(syncStaticMethodDemo);
+//        Thread thread2 = new Thread(syncStaticMethodDemo);
 
         // 加锁有效
 //        SyncStaticMethodDemo syncStaticMethodDemo1 = new SyncStaticMethodDemo();
@@ -52,9 +52,9 @@ public class SynchronizedDemo {
 
         /** case5：synchronized修饰类，类锁 */
         // 加锁有效
-        //        SyncClassDemo syncClassDemo = new SyncClassDemo();
-        //        Thread thread1 = new Thread(syncClassDemo);
-        //        Thread thread2 = new Thread(syncClassDemo);
+//        SyncClassDemo syncClassDemo = new SyncClassDemo();
+//        Thread thread1 = new Thread(syncClassDemo);
+//        Thread thread2 = new Thread(syncClassDemo);
 
         // 加锁有效
         SyncClassDemo syncClassDemo1 = new SyncClassDemo();
