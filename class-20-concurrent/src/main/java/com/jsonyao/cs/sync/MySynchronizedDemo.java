@@ -1,4 +1,4 @@
-package com.jsonyao.cs.aqs;
+package com.jsonyao.cs.sync;
 
 import java.util.concurrent.TimeUnit;
 

@@ -1,4 +1,4 @@
-package com.java.muse.aqs;
+package com.java.muse.sync;
 
 import java.util.concurrent.TimeUnit;
 
