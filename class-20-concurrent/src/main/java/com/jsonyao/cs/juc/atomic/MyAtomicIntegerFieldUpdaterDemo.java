@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 public class MyAtomicIntegerFieldUpdaterDemo {
 
     static class A {
+        // Must be volatile type
         volatile int intValue = 100;
     }
 
