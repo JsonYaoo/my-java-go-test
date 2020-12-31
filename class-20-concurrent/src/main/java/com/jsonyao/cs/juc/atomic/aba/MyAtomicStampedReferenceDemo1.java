@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicStampedReference;
 
 /**
- * 测试AtomicStampedXXX解决ABA问题: 加入版本号, 下一个线程使用上一个版本号会更新失败
+ * 测试AtomicStampedReference解决ABA问题: 加入版本号, 下一个线程使用上一个版本号会更新失败
  */
 public class MyAtomicStampedReferenceDemo1 {
 

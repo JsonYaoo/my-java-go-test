@@ -2,19 +2,18 @@ package com.jsonyao.cs.juc.atomic.aba;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicStampedReference;
+import java.util.concurrent.atomic.AtomicMarkableReference;
 
 /**
- * 测试AtomicStampedReference解决ABA问题(更好理解的案例):
- * Reference: https://www.cnblogs.com/549294286/p/3766717.html
+ * 测试AtomicMarkableReference解决ABA问题: 对于需要多版本的场景不容易解决
  */
-public class MyAtomicIntegerAbaDemo2 {
+public class MyAtomicMarkableReferenceDemo3 {
 
     // 会有ABA问题
     public static final AtomicInteger ATOMIC_INTEGER = new AtomicInteger(100);
 
     // 不会有ABA问题
-    public static final AtomicStampedReference<Integer> ATOMIC_STAMPED_REFERENCE = new AtomicStampedReference<Integer>(100, 0);
+    public static final AtomicMarkableReference<Integer> ATOMIC_MARKABLE_REFERENCE = new AtomicMarkableReference<>(100, false);
 
     public static void main(String[] args) throws InterruptedException {
         Thread thread0 = new Thread(() -> {
@@ -40,16 +39,13 @@ public class MyAtomicIntegerAbaDemo2 {
         thread1.join();
 
         Thread threadRef0 = new Thread(() -> {
-            ATOMIC_STAMPED_REFERENCE.compareAndSet(100, 101,
-                    ATOMIC_STAMPED_REFERENCE.getStamp(), ATOMIC_STAMPED_REFERENCE.getStamp()+1);
+            ATOMIC_MARKABLE_REFERENCE.compareAndSet(100, 101, false, true);
 
-            ATOMIC_STAMPED_REFERENCE.compareAndSet(101, 100,
-                    ATOMIC_STAMPED_REFERENCE.getStamp(), ATOMIC_STAMPED_REFERENCE.getStamp()+1);
+            ATOMIC_MARKABLE_REFERENCE.compareAndSet(101, 100, true, false);
         });
 
         Thread threadRef1 = new Thread(() -> {
-            int stamp = ATOMIC_STAMPED_REFERENCE.getStamp();
-
+            boolean isMark = ATOMIC_MARKABLE_REFERENCE.isMarked();
             try {
                 TimeUnit.SECONDS.sleep(2);
             } catch (InterruptedException e) {
@@ -57,7 +53,7 @@ public class MyAtomicIntegerAbaDemo2 {
             }
 
             // 尝试更新 => 更新失败
-            boolean result = ATOMIC_STAMPED_REFERENCE.compareAndSet(100, 101, stamp, stamp + 1);
+            boolean result = ATOMIC_MARKABLE_REFERENCE.compareAndSet(100, 101, isMark, !isMark);
             System.out.println(result);// false
         });
 
