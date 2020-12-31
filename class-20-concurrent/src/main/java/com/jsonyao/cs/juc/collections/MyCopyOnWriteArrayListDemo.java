@@ -1,4 +1,4 @@
-package com.jsonyao.cs.juc.atomic.collections;
+package com.jsonyao.cs.juc.collections;
 
 import java.util.*;
 import java.util.concurrent.*;
