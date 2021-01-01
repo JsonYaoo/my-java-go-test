@@ -21,7 +21,7 @@ public class FileUploadController {
         System.out.println(filename.getOriginalFilename());
         System.out.println(filename.getName());
 
-        String root_path = "D:/DevProgram/chg/";
+        String root_path = "D:/data/change/";
 
         filename.transferTo(new File(root_path + filename.getOriginalFilename()));
         Map<String, Object> map = new HashMap<>();
