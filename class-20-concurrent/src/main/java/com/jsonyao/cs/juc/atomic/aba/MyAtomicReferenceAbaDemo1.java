@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * 测试ABA问题: 同样的abc经过abcd ->abc, 对于第二个线程不应该能够设置成功, 但却设置成功了
+ * 解决方案是使用AtomicStampedReferenceTest|AtomicMarkableReference
  */
 public class MyAtomicReferenceAbaDemo1 {
 
