@@ -21,7 +21,7 @@ public class MyCopyOnWriteArrayListDemo {
     /**
      * List初始化数量
      */
-    public static final int SET_SIZE = 1000;
+    public static final int PUT_SIZE = 1000;
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         MyCopyOnWriteArrayListDemo myCopyOnWriteArrayListDemo = new MyCopyOnWriteArrayListDemo();
@@ -176,7 +176,7 @@ public class MyCopyOnWriteArrayListDemo {
         public Integer call() throws Exception {
             long start = System.currentTimeMillis();
 
-            for(int i = 0; i < SET_SIZE; i++){
+            for(int i = 0; i < PUT_SIZE; i++){
                 list.add(new Random().nextInt(1000));
             }
 
