@@ -12,11 +12,7 @@ import java.util.concurrent.TimeoutException;
 /**
  * Producer HelloWorld
  */
-public class Sender {
-
-    public static final String HOST = "192.168.1.111";
-    public static final Integer PORT = 5672;
-    public static final String VIRTUAL_HOST = "/";
+public class Sender extends BaseClient{
 
     public static void main(String[] args) throws IOException, TimeoutException {
         // 1. 创建ConnectionFactory
@@ -32,8 +28,7 @@ public class Sender {
         Channel channel = connection.createChannel();
 
         // 4. 创建Queue
-        String queueName = "test001";
-        channel.queueDeclare(queueName, false, false, false, null);
+//        channel.queueDeclare(ROUTING_KEY, false, false, false, null);
 
         // 5. 构建消息
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
@@ -45,7 +40,9 @@ public class Sender {
         // 6. 发送消息到Queue中
         for(int i = 0; i < 5; i++){
             String msg = "Hello World RabbitMQ" + i;
-            channel.basicPublish("", queueName, props, msg.getBytes());
+            // 注意, 这里采用了Direct默认的交换机, 且RoutingKey声明为了"test0001", 消费者想要拉取必须拉取名为"test001"的queue
+            channel.basicPublish("", ROUTING_KEY, props, msg.getBytes());
+            System.out.println("发送消息完毕...");
         }
     }
 }
