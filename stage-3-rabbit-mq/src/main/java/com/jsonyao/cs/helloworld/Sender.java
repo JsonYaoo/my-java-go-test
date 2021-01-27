@@ -40,7 +40,7 @@ public class Sender extends BaseClient{
         // 6. 发送消息到Queue中
         for(int i = 0; i < 5; i++){
             String msg = "Hello World RabbitMQ" + i;
-            // 注意, 这里采用了Direct默认的交换机, 且RoutingKey声明为了"test0001", 消费者想要拉取必须拉取名为"test001"的queue
+            // 注意, 这里EXCHANGE_NAME为"", 表示采用了默认的交换机(Direct模式), 因此, 表示把消息路由到名称为ROUTING_KEY的Queue上
             channel.basicPublish("", ROUTING_KEY, props, msg.getBytes());
             System.out.println("发送消息完毕...");
         }

@@ -1,4 +1,4 @@
-package com.jsonyao.cs.helloworld;
+package com.jsonyao.cs.exchange.direct;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Consumer HelloWorld
+ * Consumer: 测试Direct交换机
  */
 public class Receiver extends BaseClient{
 
@@ -19,8 +19,6 @@ public class Receiver extends BaseClient{
         connectionFactory.setHost(HOST);
         connectionFactory.setPort(PORT);
         connectionFactory.setVirtualHost(VIRTUAL_HOST);
-        connectionFactory.setAutomaticRecoveryEnabled(true);
-        connectionFactory.setNetworkRecoveryInterval(3000);
 
         // 2. 创建Connection
         Connection connection = connectionFactory.newConnection();
@@ -28,16 +26,21 @@ public class Receiver extends BaseClient{
         // 3. 创建Channel
         Channel channel = connection.createChannel();
 
-        // 4. 创建Queue
-        channel.queueDeclare(ROUTING_KEY, false, false, false, null);
+        // 4. 声明交换机
+        channel.exchangeDeclare(EXCHANGE_NAME, EXCHANGE_TYPE, true, false, null);
 
-        // 5. 创建Consumer
+        // 5. 声明队列
+        channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+
+        // 6. Queue绑定Exchange: 表示交换机EXCHANGE_NAME上ROUTING_KEY的消息会路由到QUEUE_NAME中
+        channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, ROUTING_KEY);
+
+        // 7. 创建Consumer
         QueueingConsumer queueingConsumer = new QueueingConsumer(channel);
-        // 由于采用了默认的交换机(Direct模式), 因此ROUTING_KEY的消息会路由到名为ROUTING_KEY的Queue中, 所以消费者去ROUTING_KEY队列中拿消息
-        channel.basicConsume(ROUTING_KEY, true, queueingConsumer);
-        
-        // 6. 拉取 | 监听消息
-        System.out.println("开始监听消息...");
+        channel.basicConsume(QUEUE_NAME, true, queueingConsumer);
+
+        // 8. 拉取消息
+        System.out.println("开始拉取消息...");
         while (true){
             QueueingConsumer.Delivery delivery = queueingConsumer.nextDelivery();
             String msg = new String(delivery.getBody());
