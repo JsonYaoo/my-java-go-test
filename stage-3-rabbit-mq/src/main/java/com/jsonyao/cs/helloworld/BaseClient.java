@@ -8,12 +8,15 @@ public class BaseClient {
     /**
      * 主机
      */
-    public static final String HOST = "192.168.1.111";
+//    public static final String HOST = "192.168.1.111";
+    public static final String HOST = "192.168.1.112";// Ha-Proxy
+//    public static final String HOST = "192.168.1.113";// Ha-Proxy
 
     /**
      * 端口
      */
-    public static final Integer PORT = 5672;
+//    public static final Integer PORT = 5672;
+    public static final Integer PORT = 5671;// Ha-Proxy
 
     /**
      * 虚拟主机
