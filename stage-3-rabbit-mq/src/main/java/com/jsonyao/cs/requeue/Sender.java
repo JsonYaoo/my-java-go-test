@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Producer: 测试Fanout交换机
+ * Producer: 测试ACK与重回队列
  */
 public class Sender extends BaseClient {
 

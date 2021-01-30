@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Consumer: 测试Fanout交换机
+ * Consumer: 测试Confirm消息机制
  */
 public class Receiver extends BaseClient {
 

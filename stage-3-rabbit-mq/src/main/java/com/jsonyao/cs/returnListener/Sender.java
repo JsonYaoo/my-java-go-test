@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Producer: 测试Fanout交换机
+ * Producer: 测试Return消息机制
  */
 public class Sender extends BaseClient {
 
