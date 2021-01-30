@@ -1,4 +1,4 @@
-package com.jsonyao.cs.message;
+package com.jsonyao.cs.dlx;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Consumer: 测试Message与TTL消息
+ * Consumer: 测试死信队列与TTL队列
  */
 public class Receiver extends BaseClient {
 
@@ -27,23 +27,31 @@ public class Receiver extends BaseClient {
         // 3. 创建Channel
         Channel channel = connection.createChannel();
 
-        // 5. 声明队列, 使用默认的交换机
-        channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+        // 4. 声明死信队列交换机
+        channel.exchangeDeclare(DLX_EXCHANGE_NAME, DLX_EXCHANGE_TYPE, true, false, false,null);
+
+        // 5. 声明死信队列
+        channel.queueDeclare(DLX_QUEUE_NAME, false, false, false, null);
+
+        // 6. Queue绑定Exchange: 表示交换机EXCHANGE_NAME上ROUTING_KEY的消息会路由到QUEUE_NAME中
+        channel.queueBind(DLX_QUEUE_NAME, DLX_EXCHANGE_NAME, DLX_ROUTING_KEY);
 
         // 7. 创建Consumer
         QueueingConsumer queueingConsumer = new QueueingConsumer(channel);
-        channel.basicConsume(QUEUE_NAME, false, queueingConsumer);
+        channel.basicConsume(DLX_QUEUE_NAME, false, queueingConsumer);
 
         // 8. 拉取消息
         System.err.println("consumer1 start.. ");
-        System.out.println("开始拉取消息...");
+        System.out.println("开始拉取死信队列消息...");
         while (true){
             QueueingConsumer.Delivery delivery = queueingConsumer.nextDelivery();
             String msg = new String(delivery.getBody());
-            System.out.println("收到消息: " + msg + ", RoutingKey: " + delivery.getEnvelope().getRoutingKey());
+            System.out.println("收到死信队列消息: " + msg + ", RoutingKey: " + delivery.getEnvelope().getRoutingKey());
 
             Map<String, Object> headers = delivery.getProperties().getHeaders();
             System.out.println("headers get my1 value: " + headers.get("my1"));
+
+            channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
         }
     }
 }
