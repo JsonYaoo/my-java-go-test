@@ -1,5 +1,7 @@
 package com.jsonyao.cs.thread;
 
+import java.util.concurrent.locks.LockSupport;
+
 /**
  * 线程方法测试类
  * Relation:
@@ -62,7 +64,12 @@ public class MyThreadMethodTest {
         /**
          * 6. 测试Thread#join()会不会释放synchronized锁
          */
-        test.testJoin();
+//        test.testJoin();
+
+        /**
+         * 7. 测试LockSupport.park() & unpark()会不会释放synchronized锁
+         */
+        test.testLockSupport();
     }
 
     /**
@@ -149,11 +156,26 @@ public class MyThreadMethodTest {
         // Thread.currentThread().join()因为要等待当前线程执行完在执行, 所以就造成了当前线程一直等待的状态
 //        Thread.currentThread().join();
 
-        JoinDemo1 joinDemo = new JoinDemo1(this);
-        Thread thread0 = new Thread(joinDemo);
+        JoinDemo1 joinDemo1 = new JoinDemo1(this);
+        Thread thread0 = new Thread(joinDemo1);
 
         JoinDemo2 joinDemo2 = new JoinDemo2(this, thread0);
         Thread thread1 = new Thread(joinDemo2);
+
+        thread0.start();
+        thread1.start();
+    }
+
+    /**
+     * 7. 测试LockSupport.park() & unpark()会不会释放synchronized锁
+     * => 可见, 无论是park()还是unpark(), 都不会释放锁的
+     */
+    private void testLockSupport() throws Exception{
+        LockSupportDemo1 lockSupportDemo1 = new LockSupportDemo1(this);
+        Thread thread0 = new Thread(lockSupportDemo1);
+
+        LockSupportDemo2 lockSupportDemo2 = new LockSupportDemo2(this, thread0);
+        Thread thread1 = new Thread(lockSupportDemo2);
 
         thread0.start();
         thread1.start();
@@ -356,6 +378,77 @@ class JoinDemo2 implements Runnable {
                 System.err.println(String.format("线程%s执行JoinDemo2#run(), 等待结束!", Thread.currentThread().getName()));
             }
         } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+/**
+ * LockSupport.park() & unpark()测试Demo1
+ */
+class LockSupportDemo1 implements Runnable {
+
+    /**
+     * 对象监视器
+     */
+    private MyThreadMethodTest objectMonitor;
+
+    public LockSupportDemo1(MyThreadMethodTest objectMonitor) {
+        this.objectMonitor = objectMonitor;
+    }
+
+    @Override
+    public void run() {
+        try {
+            synchronized (objectMonitor) {
+//                System.err.println(String.format("线程%s执行LockSupportDemo1#run(), 即将进入Park等待状态...", Thread.currentThread().getName()));
+//                LockSupport.park();
+//                System.err.println(String.format("线程%s执行LockSupportDemo1#run(), Park等待结束!", Thread.currentThread().getName()));
+
+                System.err.println(String.format("线程%s执行LockSupportDemo1#run(), 即将进入wait等待状态...", Thread.currentThread().getName()));
+                objectMonitor.wait();
+                System.err.println(String.format("线程%s执行LockSupportDemo1#run(), wait等待结束!", Thread.currentThread().getName()));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+/**
+ * LockSupport.park() & unpark()测试Demo2
+ */
+class LockSupportDemo2 implements Runnable {
+
+    /**
+     * 对象监视器
+     */
+    private MyThreadMethodTest objectMonitor;
+
+    /**
+     * 别的线程
+     */
+    private Thread otherThread;
+
+    public LockSupportDemo2(MyThreadMethodTest objectMonitor, Thread otherThread) {
+        this.objectMonitor = objectMonitor;
+        this.otherThread = otherThread;
+    }
+
+    @Override
+    public void run() {
+        try {
+            synchronized (objectMonitor) {
+                System.err.println(String.format("线程%s执行LockSupportDemo2#run(), 即将unpark别的线程...", Thread.currentThread().getName()));
+                objectMonitor.notifyAll();
+                LockSupport.unpark(otherThread);
+                System.err.println(String.format("线程%s执行LockSupportDemo2#run(), unpark结束...", Thread.currentThread().getName()));
+
+                System.err.println(String.format("线程%s执行LockSupportDemo2#run(), 即将进入Park等待状态...", Thread.currentThread().getName()));
+                LockSupport.park();
+                System.err.println(String.format("线程%s执行LockSupportDemo2#run(), Park等待结束!", Thread.currentThread().getName()));
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
