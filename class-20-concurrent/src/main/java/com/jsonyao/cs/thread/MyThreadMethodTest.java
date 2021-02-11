@@ -57,7 +57,12 @@ public class MyThreadMethodTest {
         /**
          * 5. 测试线程让步会不会释放synchronized锁
          */
-        test.testYield();
+//        test.testYield();
+
+        /**
+         * 6. 测试Thread#join()会不会释放synchronized锁
+         */
+        test.testJoin();
     }
 
     /**
@@ -131,6 +136,24 @@ public class MyThreadMethodTest {
         YieldDemo yieldDemo = new YieldDemo();
         Thread thread0 = new Thread(yieldDemo);
         Thread thread1 = new Thread(yieldDemo);
+
+        thread0.start();
+        thread1.start();
+    }
+
+    /**
+     * 6. 测试Thread#join()会不会释放synchronized锁
+     * 结论: Join()也是不会释放锁的, Join给别人后仍然持有锁
+     */
+    private void testJoin() throws Exception{
+        // Thread.currentThread().join()因为要等待当前线程执行完在执行, 所以就造成了当前线程一直等待的状态
+//        Thread.currentThread().join();
+
+        JoinDemo1 joinDemo = new JoinDemo1(this);
+        Thread thread0 = new Thread(joinDemo);
+
+        JoinDemo2 joinDemo2 = new JoinDemo2(this, thread0);
+        Thread thread1 = new Thread(joinDemo2);
 
         thread0.start();
         thread1.start();
@@ -262,6 +285,78 @@ class YieldDemo implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+    }
+}
+
+/**
+ * Thread.yieldDemo()测试Demo1
+ */
+class JoinDemo1 implements Runnable {
+
+    /**
+     * 对象监视器
+     */
+    private MyThreadMethodTest objectMonitor;
+
+    public JoinDemo1(MyThreadMethodTest objectMonitor) {
+        this.objectMonitor = objectMonitor;
+    }
+
+    @Override
+    public void run() {
+        synchronized (objectMonitor) {
+            try {
+                System.err.println(String.format("线程%s执行JoinDemo1#run(), 即将进入等待状态...", Thread.currentThread().getName()));
+                objectMonitor.wait();
+                System.err.println(String.format("线程%s执行JoinDemo1#run(), 等待结束!", Thread.currentThread().getName()));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+/**
+ * Thread.yieldDemo()测试Demo2
+ */
+class JoinDemo2 implements Runnable {
+
+    /**
+     * 对象监视器
+     */
+    private MyThreadMethodTest objectMonitor;
+
+    /**
+     * 别的线程
+     */
+    private Thread otherThread;
+
+    public JoinDemo2(MyThreadMethodTest objectMonitor, Thread otherThread) {
+        this.objectMonitor = objectMonitor;
+        this.otherThread = otherThread;
+    }
+
+    @Override
+    public void run() {
+        try {
+//            synchronized (objectMonitor) {
+//                objectMonitor.notifyAll();
+//            }
+//            Thread.sleep(10000);
+
+            synchronized (objectMonitor) {
+                System.err.println(String.format("线程%s执行JoinDemo2#run(), 即将Join别的线程...", Thread.currentThread().getName()));
+                objectMonitor.notifyAll();
+                otherThread.join();
+                System.err.println(String.format("线程%s执行JoinDemo2#run(), 别的线程已执行完, 本线程Join结束...", Thread.currentThread().getName()));
+
+                System.err.println(String.format("线程%s执行JoinDemo2#run(), 即将进入等待状态...", Thread.currentThread().getName()));
+                objectMonitor.wait();
+                System.err.println(String.format("线程%s执行JoinDemo2#run(), 等待结束!", Thread.currentThread().getName()));
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
