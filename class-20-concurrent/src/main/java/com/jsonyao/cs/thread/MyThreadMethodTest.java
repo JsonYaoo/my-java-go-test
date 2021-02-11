@@ -47,7 +47,17 @@ public class MyThreadMethodTest {
         /**
          * 3. 测试任务本身能不能作为对象监视器
          */
-        test.testSelfWaitNotify();
+//        test.testSelfWaitNotify();
+
+        /**
+         * 4. 测试线程让步能不能让来让去
+         */
+//        test.testBackYield();
+
+        /**
+         * 5. 测试线程让步会不会释放synchronized锁
+         */
+        test.testYield();
     }
 
     /**
@@ -100,6 +110,31 @@ public class MyThreadMethodTest {
             wait2NotifyDemo.notify();
         }
     }
+
+    /**
+     * 4. 测试线程让步能不能让来让去
+     * => 答案是不能让来让去从而让出循环的, 因为yield完就结束继续执行了, 而且yield完还可能立即执行, 所以是不会循环yield的
+     */
+    public void testBackYield() throws Exception {
+        Thread thread0 = new Thread(new YieldDemo());
+        Thread thread1 = new Thread(new YieldDemo());
+
+        thread0.start();
+        thread1.start();
+    }
+
+    /**
+     * 5. 测试线程让步会不会释放synchronized锁
+     * => 答案是不会, 持有synchronized锁的yield跟没yield一样, yield完还是没有释放锁的
+     */
+    public void testYield() throws Exception {
+        YieldDemo yieldDemo = new YieldDemo();
+        Thread thread0 = new Thread(yieldDemo);
+        Thread thread1 = new Thread(yieldDemo);
+
+        thread0.start();
+        thread1.start();
+    }
 }
 
 /**
@@ -112,6 +147,8 @@ class SleepDemo implements Runnable{
         synchronized (MyThreadMethodTest.class) {
             System.err.println(Thread.currentThread().getName() + "执行SleepDemo#run(), 即将睡眠10s...");
             try {
+                // 重复启动会抛出java.lang.IllegalThreadStateException
+//                Thread.currentThread().start();
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -199,6 +236,29 @@ class Wait2NotifyDemo implements Runnable {
                 System.err.println(String.format("线程%s执行SleepDemo#run(), 被唤醒, 对象监视器为%s, 即将睡眠10s...",
                         Thread.currentThread().getName(), this.getClass().getName()));
                 Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+/**
+ * Thread.yieldDemo()测试Demo
+ */
+class YieldDemo implements Runnable {
+
+    @Override
+    public void run() {
+        synchronized (this) {
+            try {
+                System.err.println(String.format("线程%s执行YieldDemo#run(), 即将让步给别的线程执行!", Thread.currentThread().getName()));
+                Thread.yield();
+                System.err.println(String.format("线程%s执行YieldDemo#run(), 让步给别的线程执行结束!", Thread.currentThread().getName()));
+
+                System.err.println(String.format("线程%s执行YieldDemo#run(), 即将进入睡眠等待状态...", Thread.currentThread().getName()));
+                Thread.sleep(10000);
+                System.err.println(String.format("线程%s执行YieldDemo#run(), 睡眠结束!", Thread.currentThread().getName()));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
