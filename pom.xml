@@ -25,6 +25,7 @@
         <module>class-04-spring-webmvc</module>
         <module>class-20-concurrent</module>
         <module>stage-3-rabbit-mq</module>
+        <module>test-request-mapping</module>
     </modules>
 
     <!--<properties>-->
