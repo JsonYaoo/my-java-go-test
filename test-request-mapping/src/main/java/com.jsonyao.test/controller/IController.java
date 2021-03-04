@@ -55,6 +55,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * 20. 顶层接口类注解+顶层接口方法注解 + 非直属抽象类注解+非直属抽象方法注解(未实现) + 二级接口注解
  * 测试结果:
  */
+/**
+ * 21. 顶层接口类注解+顶层接口方法注解 + 非直属抽象类实现(类和方法都无注解) + 二级接口注解
+ * 测试结果: 顶层接口类不生效, 顶层方法生效, 二级接口生效
+ */
 @RequestMapping("testi")
 public interface IController extends BaseController {
 
