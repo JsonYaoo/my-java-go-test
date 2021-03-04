@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * RequestMapping测试应用: 测试继承关系
  */
-@RestController
+//@RestController
 /**
  * 10. 顶层接口类注解+顶层接口方法注解 + 二级接口注解 + 底层类注解
  * 测试结果: 顶层接口类失效, 顶层接口方法生效, 二级接口失效, 底层接口生效
