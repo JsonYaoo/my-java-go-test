@@ -19,9 +19,9 @@ public class MySynchronizedDemo {
         /**
          * Case 1: synchronized锁普通对象 => 对象锁
          */
-//        SyncThisObjectDemo syncThisObjectDemo = new SyncThisObjectDemo();
-//        Thread thread0 = new Thread(syncThisObjectDemo);// 加锁有效 => thread0输出完thread1输出
-//        Thread thread1 = new Thread(syncThisObjectDemo);// 加锁有效 => thread0输出完thread1输出
+        SyncThisObjectDemo syncThisObjectDemo = new SyncThisObjectDemo();
+        Thread thread0 = new Thread(syncThisObjectDemo);// 加锁有效 => thread0输出完thread1输出
+        Thread thread1 = new Thread(syncThisObjectDemo);// 加锁有效 => thread0输出完thread1输出
 
 //        Thread thread0 = new Thread(new SyncThisObjectDemo());// 加锁无效 => 依然乱序输出没有规律
 //        Thread thread1 = new Thread(new SyncThisObjectDemo());// 加锁无效 => 依然乱序输出没有规律
@@ -53,10 +53,18 @@ public class MySynchronizedDemo {
 //        Thread thread0 = new Thread(syncClassDemo);// 加锁有效 => thread0输出完thread1输出
 //        Thread thread1 = new Thread(syncClassDemo);// 加锁有效 => thread0输出完thread1输出
 
-        Thread thread0 = new Thread(new SyncClassDemo());// 加锁有效 => thread0输出完thread1输出
-        Thread thread1 = new Thread(new SyncClassDemo());// 加锁有效 => thread0输出完thread1输出
+//        Thread thread0 = new Thread(new SyncClassDemo());// 加锁有效 => thread0输出完thread1输出
+//        Thread thread1 = new Thread(new SyncClassDemo());// 加锁有效 => thread0输出完thread1输出
 
         thread0.start();
+
+        // 测试Synchronized代码块异常是否会释放锁 => 答案是会
+//        try {
+//            thread1.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
         thread1.start();
     }
 
@@ -85,6 +93,11 @@ class SyncThisObjectDemo implements Runnable {
     @Override
     public void run() {
         synchronized (this){
+            // 测试Synchronized代码块异常是否会释放锁 => 答案是会
+//            if(!"Thread-1".equals(Thread.currentThread().getName())){
+//                int i = 1 / 0;
+//            }
+
             MySynchronizedDemo.printLoopInfo(200);
         }
     }
