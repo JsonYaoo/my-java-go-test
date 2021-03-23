@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.0</version>
+        <version>2.1.5.RELEASE</version>
     </parent>
 
     <groupId>com.jsonyao.cs</groupId>
@@ -26,6 +26,7 @@
         <module>class-20-concurrent</module>
         <module>stage-3-rabbit-mq</module>
         <module>test-request-mapping</module>
+        <module>test-redis</module>
     </modules>
 
     <!--<properties>-->
