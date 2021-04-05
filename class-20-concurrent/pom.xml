@@ -11,5 +11,11 @@
 
     <artifactId>class-20-concurrent</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
+        </dependency>
+    </dependencies>
 </project>
