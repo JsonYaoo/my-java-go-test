@@ -27,6 +27,7 @@
         <module>stage-3-rabbit-mq</module>
         <module>test-request-mapping</module>
         <module>test-redis</module>
+        <module>class-35-encryption</module>
     </modules>
 
     <!--<properties>-->
