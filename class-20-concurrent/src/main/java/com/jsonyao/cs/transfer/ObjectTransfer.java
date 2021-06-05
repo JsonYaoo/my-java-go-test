@@ -55,6 +55,12 @@ public class ObjectTransfer {
      *          因此也还是引用，所以java没有指针，只有引用。
      */
     public static void main(String[] args) {
+        // 引用一开始为null, 后来p为非null时, o并不会等于p引用的新地址, 此前的赋值如果为null, 则跟赋值为null没什么两样, 因为此时的p不会有任何的地址指向
+        Object p = null;
+        Object o = p;
+        p = new Object();
+
+
         Example ex = new Example();// i为0
         A a = new A();
         Example ex1 = a.add0(ex);// i为1
