@@ -1,5 +1,7 @@
 package com.jsonyao.cs.transfer;
 
+import java.lang.ref.*;
+
 /**
  * 测试对象实参传递
  *
@@ -43,7 +45,7 @@ public class ObjectTransfer {
      *          弱引用本身的特点: 比软引用具有更短的生命周期(但还是有用, 因为垃圾回收线程是比较低级的线程)、
      *                          get()会返回该对象的强引用(回收后会返回null)、在对象被认定为需要被垃圾回收时, 该弱引用会被放入到引用队列中、
      *                          isEnQueued()用于判断该对象是否被认定为需要被垃圾回收。
-     *          弱引用的作用: 用于监控对象是否已经被垃圾回收器标记为即将回收的垃圾。
+     *          弱引用的作用: 用于规范化Map, 防止内存泄露, 如ThreadLocal。
      *      d. 虚引用(回收后加入引用队列): PhantomReference, 只被虚引用的对象跟没有被引用几乎是一样的, 随时可能会被垃圾回收器回收
      *          虚引用本身的特点: get()获取该对象的强引用时永远为null、必须与引用队列一起使用、
      *                          当垃圾回收器回收该对象后, 会将该虚引用加入引用队列, 用于判断之前引用的对象是否已经被回收了, 而程序判断到如果还有虚引用,
@@ -54,7 +56,7 @@ public class ObjectTransfer {
      *          比如这个链表头指针移动到哪里哪里等等，实际上移动到哪里哪里，也还是引用的赋值，因为从内存的角度来说，也就是把新的头节点的引用赋值给原来的头节点，
      *          因此也还是引用，所以java没有指针，只有引用。
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         // 引用一开始为null, 后来p为非null时, o并不会等于p引用的新地址, 此前的赋值如果为null, 则跟赋值为null没什么两样, 因为此时的p不会有任何的地址指向
         Object p = null;
         Object o = p;
@@ -75,6 +77,42 @@ public class ObjectTransfer {
         Example ex4;// 会被编译器直接无视掉
 //        System.err.println(ex4);// 编译器会报编译错误, ex4还没被初始化
         int[][] arr2 = new int[2][];// 并不会报错, 说明为正常情况
+
+        // 软引用
+        for (int i = 0; i < 10; i++) {
+            ReferenceQueue<Object> queue1 = new ReferenceQueue<>();
+            SoftReference softReference = new SoftReference(new String("123"), queue1);
+            System.gc();
+            System.gc();
+            Object o1 = softReference.get();
+            System.err.println("soft ref: " + o1);// 123
+            Reference<?> poll = queue1.poll();
+            System.err.println("soft queue: " + poll);// null
+        }
+
+        // 弱引用
+        for (int i = 0; i < 10; i++) {
+            ReferenceQueue<Object> queue2 = new ReferenceQueue<>();
+            WeakReference weakReference = new WeakReference(new String("123"), queue2);
+            System.gc();
+            System.gc();
+            Object o2 = weakReference.get();
+            System.err.println("weak ref: " + o2);// null
+            Reference<?> poll2 = queue2.poll();
+            System.err.println("weak queue: " + poll2);// java.lang.ref.WeakReference@4f023edb
+        }
+
+        // 虚引用
+        for (int i = 0; i < 10; i++) {
+            ReferenceQueue<Object> queue3 = new ReferenceQueue<>();
+            PhantomReference phantomReference = new PhantomReference<>(new String("123"), queue3);
+            System.gc();
+            System.gc();
+            Object o3 = phantomReference.get();
+            System.err.println("phantom ref: " + o3);// null
+            Reference<?> poll3 = queue3.poll();
+            System.err.println("phantom queue: " + poll3);// java.lang.ref.PhantomReference@77459877
+        }
     }
 }
 
