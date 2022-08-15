@@ -27,8 +27,8 @@ public class Sender extends BaseClient{
         // 3. 创建Channel
         Channel channel = connection.createChannel();
 
-        // 4. 创建Queue
-//        channel.queueDeclare(ROUTING_KEY, false, false, false, null);
+        // 4. 创建Queue: 一般不在Java中创建, 而是提前维护好多列
+        channel.queueDeclare(ROUTING_KEY, false, false, false, null);
 
         // 5. 构建消息
         AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()

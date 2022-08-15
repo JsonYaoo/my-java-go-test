@@ -28,8 +28,8 @@ public class Receiver extends BaseClient{
         // 3. 创建Channel
         Channel channel = connection.createChannel();
 
-        // 4. 创建Queue
-        channel.queueDeclare(ROUTING_KEY, false, false, false, null);
+        // 4. 创建Queue: 生产者创建了消费者就不用创建了
+//        channel.queueDeclare(ROUTING_KEY, false, false, false, null);
 
         // 5. 创建Consumer
         QueueingConsumer queueingConsumer = new QueueingConsumer(channel);
